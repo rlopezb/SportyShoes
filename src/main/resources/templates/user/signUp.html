@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sporty Shoes</title>
+</head>
+<body>
+<h2>Sign up</h2>
+<table>
+    <form method="post" th:action="@{/user/signUp}" th:object="${user}">
+        <tr>
+            <td><label for="name">Name</label>:</td>
+            <td><input type="text" id="name" name="name" th:field="*{name}" autofocus="autofocus"/></td>
+        </tr>
+        <tr>
+            <td><label for="lastname">Lastname</label>:</td>
+            <td><input type="text" id="lastname" name="lastname" th:field="*{lastname}"/></td>
+        </tr>
+        <tr>
+            <td><label for="email">eMail</label>:</td>
+            <td><input type="email" id="email" name="email" th:field="*{email}"/></td>
+        </tr>
+        <tr>
+            <td></t><label for="username">Username</label>:</td>
+            <td><input type="text" id="username" name="username" th:field="*{username}"/></td>
+        </tr>
+        <tr>
+            <td><label for="password">Password</label>:</td>
+            <td><input type="password" id="password" name="password" th:field="*{password}"/></td>
+        </tr>
+
+        <tr>
+            <td><input type="submit" value="Sign up"/></td>
+        </tr>
+    </form>
+</table>
+<h4 th:text="${message}"></h4>
+Return to <a th:href="@{/index}">index</a> page
+</body>
+</html>
