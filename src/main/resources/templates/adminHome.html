@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sporty Shoes</title>
+</head>
+<body>
+<h4 th:text="'User '+${session.user['name']}+' '+${session.user['lastname']}"></h4>
+<h2 th:text="'Wellcome to Sporty Shoes'"></h2>
+<div th:if="${session.user['role'] == 'admin'}">
+    <a th:href="@{/product/manage}">Manage products</a><br/>
+    <a th:href="@{/user/manage}">Manage users</a><br/>
+    <a th:href="@{/templates/purchase/manage}">Manage orders</a>
+</div>
+<div th:unless="${session.user['role'] == 'admin'}">
+    <strong>Authorization denied</strong><br/>
+    Return to <a th:href="@{/index}">index</a> page.
+</div>
+</body>
+</html>

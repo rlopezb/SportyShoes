@@ -1,4 +1,4 @@
-package com.sportyshoes.ecommerce.service;
+package com.sportyshoes.ecommerce.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

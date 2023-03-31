@@ -12,20 +12,17 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Product {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String name;
-  private String lastname;
-  @Column(unique = true)
-  private String email;
-  @Column(unique = true)
-  private String username;
-  private String password;
-  private String role;
-  @OneToMany(mappedBy = "user")
-  private List<Purchase> purchases = new ArrayList<>();
+  private String brand;
+  private String model;
+  private Integer size;
+  private Float price;
+  private Integer quantity;
+  @OneToMany(mappedBy = "product")
+  private List<PurchaseProduct> purchaseProducts=new ArrayList<>();
 }
 

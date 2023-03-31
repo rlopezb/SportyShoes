@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sporty Shoes</title>
+</head>
+<body>
+<h4 th:text="'User '+${session.user['name']}+' '+${session.user['lastname']}"></h4>
+<h2 th:text="'Wellcome to Sporty Shoes'"></h2>
+<table>
+    <tr>
+        <th>Brand</th>
+        <th>Model</th>
+        <th>Size</th>
+        <th>Price</th>
+        <th>Quantity</th>
+    </tr>
+    <tr th:each="product:${products}">
+        <td th:text="${product.brand}"/>
+        <td th:text="${product.model}"/>
+        <td th:text="${product.size}"/>
+        <td th:text="${product.price}"/>
+        <td th:text="${product.quantity}"/>
+        <td>
+            <a th:href="@{/purchase/{purchaseId}/add/{productId} (purchaseId=${session.purchase['id']}, productId=${product.id}) }">Buy</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
