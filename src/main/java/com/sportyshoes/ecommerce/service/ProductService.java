@@ -28,11 +28,7 @@ public class ProductService {
 
   public ProductDto findById(Long id) {
     Optional<Product> optionalProduct = productRepository.findById(id);
-    if (optionalProduct.isPresent()) {
-      return modelMapper.map(optionalProduct.get(), ProductDto.class);
-    } else {
-      return null;
-    }
+    return optionalProduct.map(product -> modelMapper.map(product, ProductDto.class)).orElse(null);
   }
 
   public ProductDto save(ProductDto productDto) {

@@ -18,11 +18,6 @@ public class ModelMapperConfig {
         skip(destination.getPassword());
       }
     });
-//    PropertyMap<Purchase, PurchaseDto> warehouseFieldMapping = new PropertyMap<Purchase, PurchaseDto>() {
-//      protected void configure() {
-//
-//      }
-//    };
     return modelMapper;
   }
 }
