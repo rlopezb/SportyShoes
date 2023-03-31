@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 public class PurchaseProductDto {
   private Long id;
   private Long purchaseId;
-  private Product product;
+  private Long productId;
+  private String productBrand;
+  private String productModel;
+  private Integer productSize;
+  private Float productPrice;
   private Integer quantity;
 }

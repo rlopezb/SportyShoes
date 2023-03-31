@@ -37,17 +37,21 @@ public class PurchaseController {
   }
 
   @GetMapping("list")
-  public String purchase(Model model, @ModelAttribute("user") UserDto userDto, @ModelAttribute("purchase") PurchaseDto purchaseDto){
-    purchaseDto.setUserId(userDto.getId());
-    purchaseDto = purchaseService.save(purchaseDto);
-    model.addAttribute("purchase",purchaseDto);
-    model.addAttribute("products",productService.findAll());
+  public String purchase(Model model, @ModelAttribute("user") UserDto userDto, @ModelAttribute("purchase") PurchaseDto purchaseDto) {
+    if (purchaseDto.getUserId() == null) {
+      purchaseDto.setUserId(userDto.getId());
+      purchaseDto = purchaseService.save(purchaseDto);
+    }
+    model.addAttribute("purchase", purchaseDto);
+    model.addAttribute("products", productService.findAll());
     return "/purchase/list";
   }
 
   @GetMapping("{purchaseId}/add/{productId}")
-  public String addProduct(@ModelAttribute("purchase") PurchaseDto purchaseDto,@ModelAttribute("user") UserDto userDto, @ModelAttribute("product") ProductDto productDto, @PathVariable Long purchaseId, @PathVariable Long productId) {
-    purchaseService.addProduct(purchaseId, productId);
+  public String addProduct(Model model, @ModelAttribute("user") UserDto userDto, @ModelAttribute("product") ProductDto productDto, @PathVariable Long purchaseId, @PathVariable Long productId) {
+    PurchaseDto purchaseDto = purchaseService.addProduct(purchaseId, productId);
+    model.addAttribute("purchase", purchaseDto);
+    model.addAttribute("products", productService.findAll());
     return "redirect:/purchase/list";
   }
 }

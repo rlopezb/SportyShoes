@@ -1,6 +1,7 @@
 package com.sportyshoes.ecommerce.service;
 
 import com.sportyshoes.ecommerce.dto.PurchaseDto;
+import com.sportyshoes.ecommerce.dto.PurchaseProductDto;
 import com.sportyshoes.ecommerce.entity.Product;
 import com.sportyshoes.ecommerce.entity.Purchase;
 import com.sportyshoes.ecommerce.entity.PurchaseProduct;
@@ -51,20 +52,22 @@ public class PurchaseService {
     }
 
 
-    PurchaseProduct purchaseProduct = new PurchaseProduct();
-    purchaseProduct.setProduct(product);
-    purchaseProduct.setPurchase(purchase);
     if (purchase.getPurchaseProducts() == null) {
       purchase.setPurchaseProducts(new ArrayList<>());
+    }
+    List<PurchaseProduct> purchaseProducts = purchase.getPurchaseProducts();
+    PurchaseProduct purchaseProduct = purchaseProducts.stream()
+        .filter(pp -> pp.getProduct().getId() == productId)
+        .findFirst()
+        .orElse(null);
+    if (purchaseProduct == null) {
+      purchaseProduct = new PurchaseProduct();
+      purchaseProduct.setProduct(product);
+      purchaseProduct.setPurchase(purchase);
+      purchaseProduct.setQuantity(1);
+      purchaseProducts.add(purchaseProduct);
     } else {
-      List<PurchaseProduct> purchaseProducts = purchase.getPurchaseProducts();
-      if (purchaseProducts.contains(purchaseProduct)) {
-        purchaseProduct = purchaseProducts.get(purchaseProducts.indexOf(purchaseProduct));
-        purchaseProduct.setQuantity(product.getQuantity() + 1);
-      } else {
-        purchaseProduct.setQuantity(1);
-        purchaseProducts.add(purchaseProduct);
-      }
+      purchaseProduct.setQuantity(purchaseProduct.getQuantity() + 1);
     }
     product.setQuantity(product.getQuantity() - 1);
 
@@ -72,7 +75,10 @@ public class PurchaseService {
     purchase = purchaseRepository.save(purchase);
     productRepository.save(product);
 
-    return modelMapper.map(purchase, PurchaseDto.class);
+    List<PurchaseProductDto> purchaseProductDtos = List.of(modelMapper.map(purchaseProducts, PurchaseProductDto[].class));
+    PurchaseDto purchaseDto = modelMapper.map(purchase, PurchaseDto.class);
+    purchaseDto.setPurchaseProducts(purchaseProductDtos);
+    return purchaseDto;
   }
 
   public PurchaseDto save(PurchaseDto purchaseDto) {

@@ -41,8 +41,22 @@
                 <th>Price</th>
                 <th>Quantity</th>
             </tr>
+            <div th:if="${not #lists.isEmpty(session.purchase['purchaseProducts'])}">
+                <tr th:each="purchaseProduct:${session.purchase['purchaseProducts']}">
+                    <td th:text="${purchaseProduct.productBrand}"/>
+                    <td th:text="${purchaseProduct.productModel}"/>
+                    <td th:text="${purchaseProduct.productSize}"/>
+                    <td th:text="${purchaseProduct.productPrice}"/>
+                    <td th:text="${purchaseProduct.quantity}"/>
+                </tr>
+                <tr>
+                    <td colspan="3"/>
+                    <td>
+                        <b th:text="${#numbers.formatDecimal(#aggregates.sum(session.purchase['purchaseProducts'].![productPrice*quantity]), 0, 'COMMA', 2, 'POINT')}"/>
+                    </td>
+                </tr>
+            </div>
         </table>
-    </div>
     </div>
 </div>
 </body>
