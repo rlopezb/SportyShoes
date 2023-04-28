@@ -29,7 +29,7 @@
         <td th:text="${product.price}"/>
         <td th:text="${product.quantity}"/>
         <td>
-            <a th:href="@{/product/modify/{productId} (productId=${product.id}) }">Modify</a>
+            <a th:href="@{/product/update/{productId} (productId=${product.id}) }">Modify</a>
         </td>
         <td>
             <a th:href="@{/product/delete/{productId} (productId=${product.id}) }">Delete</a>
