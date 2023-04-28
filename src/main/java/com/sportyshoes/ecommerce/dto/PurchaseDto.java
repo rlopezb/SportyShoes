@@ -1,6 +1,5 @@
 package com.sportyshoes.ecommerce.dto;
 
-import com.sportyshoes.ecommerce.entity.PurchaseProduct;
 import lombok.Data;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -16,7 +15,7 @@ public class PurchaseDto {
   private LocalDateTime created = LocalDateTime.now();
   private LocalDateTime payed;
   private LocalDateTime cancelled;
-  private Long userId;
+  private UserDto user;
   private List<PurchaseProductDto> purchaseProducts;
 
 }

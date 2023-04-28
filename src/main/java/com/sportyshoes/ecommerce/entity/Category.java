@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,18 +12,11 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Purchase {
+public class Category {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private LocalDateTime created;
-  private LocalDateTime payed;
-  private LocalDateTime cancelled;
-  @ManyToOne
-  @JoinColumn(name = "user_id", nullable = false)
-  private User user;
-
-  @OneToMany(mappedBy = "purchase")
-  private List<PurchaseProduct> purchaseProducts=new ArrayList<>();
-
+  private String name;
+  @OneToMany(mappedBy = "category")
+  private List<Product> products = new ArrayList<>();
 }

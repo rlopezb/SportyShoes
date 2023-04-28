@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sporty Shoes</title>
+    <link rel="stylesheet" href="/css/sporty.css">
+</head>
+<body>
+<h4 th:text="'User '+${session.user['name']}+' '+${session.user['lastname']}"></h4>
+<h2 th:text="'Wellcome to Sporty Shoes'"></h2>
+<h4 th:text="${message}"></h4>
+<br>
+<h2>List of users</h2>
+<table>
+    <form method="get" th:action="@{/user/list}">
+        <tr>
+            <td><label for="pattern">Username pattern</label>:</td>
+            <td><input type="text" id="pattern" name="pattern" autofocus="autofocus"/></td>
+            <td><input type="submit" value="Search"/></td>
+        </tr>
+    </form>
+</table>
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Lastname</th>
+        <th>eMail</th>
+        <th>Role</th>
+    </tr>
+    <tr th:each="user:${users}">
+        <td th:text="${user.username}"/>
+        <td th:text="${user.name}"/>
+        <td th:text="${user.lastname}"/>
+        <td th:text="${user.email}"/>
+        <td th:text="${user.role}"/>
+    </tr>
+</table>
+<a th:href="@{/adminHome}">Home</a><br>
+<a th:href="@{/user/logout}">Logout</a>
+</body>
+</html>

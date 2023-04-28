@@ -21,6 +21,8 @@ public class ProductService {
 
   public List<ProductDto> findAll() {
     List<Product> products = productRepository.findAll();
+    if (products == null)
+      return null;
     return products.stream()
         .map(product -> modelMapper.map(product, ProductDto.class))
         .collect(Collectors.toList());

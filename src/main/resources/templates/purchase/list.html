@@ -8,56 +8,79 @@
 <body>
 <h4 th:text="'User '+${session.user['name']}+' '+${session.user['lastname']}"></h4>
 <h2 th:text="'Wellcome to Sporty Shoes'"></h2>
-<div class="row">
-    <div class="column">
-        <h4 th:text="'Our products'"></h4>
-        <table>
-            <tr>
-                <th>Brand</th>
-                <th>Model</th>
-                <th>Size</th>
-                <th>Price</th>
-                <th>Quantity</th>
-            </tr>
-            <tr th:each="product:${products}">
-                <td th:text="${product.brand}"/>
-                <td th:text="${product.model}"/>
-                <td th:text="${product.size}"/>
-                <td th:text="${product.price}"/>
-                <td th:text="${product.quantity}"/>
-                <td th:if="${product.quantity>0}">
-                    <a th:href="@{/purchase/{purchaseId}/add/{productId} (purchaseId=${session.purchase['id']}, productId=${product.id}) }">Buy</a>
-                </td>
-                <td th:unless="${product.quantity>0}"></td>
-            </tr>
-        </table>
+<h4 th:text="${message}"></h4>
+<h2>List of orders</h2>
+<table style="width:30%">
+    <form method="get" th:action="@{/purchase/list}">
+        <tr>
+            <td><label for="created">Created</label>:</td>
+            <td><input type="datetime-local" id="created" name="created" autofocus/></td>
+        </tr>
+        <tr>
+            <td><label for="status">Category</label>:</td>
+            <td>
+                <select id="status" name="status" style="width: 40%">
+                    <option value="">All</option>
+                    <option value="draft">Draft</option>
+                    <option value="payed">Payed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Search"/></td>
+        </tr>
+    </form>
+</table>
+<br>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>User</th>
+        <th>Created</th>
+        <th>Cancelled</th>
+        <th>Payed</th>
+    </tr>
+    <div th:each="purchase:${purchases}">
+        <tr>
+            <td th:text="${purchase.id}"/>
+            <td th:text="${purchase.user.username}"/>
+            <td th:text="${purchase.created}"/>
+            <td th:text="${purchase.cancelled}"/>
+            <td th:text="${purchase.payed}"/>
+        </tr>
+        <tr th:if="${not #lists.isEmpty(purchase['purchaseProducts'])}">
+            <td colspan="5">
+                <table>
+                    <tr>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Category</th>
+                        <th>Size</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                    <tr th:each="purchaseProduct:${purchase['purchaseProducts']}">
+                        <td th:text="${purchaseProduct.productBrand}"/>
+                        <td th:text="${purchaseProduct.productModel}"/>
+                        <td th:text="${purchaseProduct.productCategoryName}"/>
+                        <td th:text="${purchaseProduct.productSize}"/>
+                        <td th:text="${purchaseProduct.productPrice}"/>
+                        <td th:text="${purchaseProduct.quantity}"/>
+                    </tr>
+                    <tr th:if="${not #lists.isEmpty(purchase['purchaseProducts'])}">
+                        <td colspan="4"></td>
+                        <td>
+                            <b th:text="${#numbers.formatDecimal(#aggregates.sum(purchase['purchaseProducts'].![productPrice*quantity]), 0, 'COMMA', 2, 'POINT')}"/>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
     </div>
-    <div class="column">
-        <h4 th:text="'Shopping cart'"></h4>
-        <table>
-            <tr>
-                <th>Brand</th>
-                <th>Model</th>
-                <th>Size</th>
-                <th>Price</th>
-                <th>Quantity</th>
-            </tr>
-            <tr th:each="purchaseProduct:${session.purchase['purchaseProducts']}">
-                <td th:text="${purchaseProduct.productBrand}"/>
-                <td th:text="${purchaseProduct.productModel}"/>
-                <td th:text="${purchaseProduct.productSize}"/>
-                <td th:text="${purchaseProduct.productPrice}"/>
-                <td th:text="${purchaseProduct.quantity}"/>
-            </tr>
-            <tr th:if="${not #lists.isEmpty(session.purchase['purchaseProducts'])}">
-                <td colspan="3"></td>
-                <td>
-                    <b th:text="${#numbers.formatDecimal(#aggregates.sum(session.purchase['purchaseProducts'].![productPrice*quantity]), 0, 'COMMA', 2, 'POINT')}"/>
-                </td>
-                <td></td>
-            </tr>
-        </table>
-    </div>
-</div>
+</table>
+<a th:href="@{/adminHome}">Home</a><br>
+<a th:href="@{/user/logout}">Logout</a>
 </body>
 </html>

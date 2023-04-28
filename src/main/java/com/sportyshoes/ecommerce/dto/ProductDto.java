@@ -12,4 +12,5 @@ public class ProductDto {
   private Integer size;
   private Float price;
   private Integer quantity;
+  private CategoryDto category;
 }

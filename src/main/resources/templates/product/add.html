@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Sporty Shoes</title>
+</head>
+<body>
+<h4 th:text="'User '+${session.user['name']}+' '+${session.user['lastname']}"></h4>
+<h2>Add new product</h2>
+<table>
+  <form method="post" th:action="@{/product/add}" th:object="${product}">
+    <tr>
+      <td><label for="brand">Brand</label>:</td>
+      <td><input type="text" id="brand" name="brand" th:field="*{brand}" autofocus="autofocus"/></td>
+    </tr>
+    <tr>
+      <td><label for="model">Model</label>:</td>
+      <td><input type="text" id="model" name="model" th:field="*{model}"/></td>
+    </tr>
+    <tr>
+      <td><label for="category">Category</label>:</td>
+      <td><select id="category" name="category" th:field="*{category.id}" style="width: 100%">
+        <option th:each="category : ${categories}"
+                th:text="${category.name}"
+                th:value="${category.id}">
+      </select></td>
+    </tr>
+    <tr>
+      <td><label for="size">Size</label>:</td>
+      <td><input type="number" id="size" name="size" th:field="*{size}"/></td>
+    </tr>
+    <tr>
+      <td></t><label for="price">Price</label>:</td>
+      <td><input type="number" step="0.01" id="price" name="price" th:field="*{price}"/></td>
+    </tr>
+    <tr>
+      <td><label for="quantity">Quantity</label>:</td>
+      <td><input type="number" id="quantity" name="quantity" th:field="*{quantity}"/></td>
+    </tr>
+    <tr>
+      <td><input type="submit" value="Add"/></td>
+    </tr>
+  </form>
+</table>
+<h4 th:text="${message}"></h4>
+Return to <a th:href="@{/index}">index</a> page
+</body>
+</html>

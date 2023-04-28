@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Sporty Shoes</title>
+    <link rel="stylesheet" href="/css/sporty.css">
 </head>
 <body>
 <h4 th:text="'User '+${session.user['name']}+' '+${session.user['lastname']}"></h4>
 <h2 th:text="'Wellcome to Sporty Shoes'"></h2>
+<h4 th:text="${message}"></h4>
+<a th:href="@{/product/add}">Add new product</a><br/>
+<h2>List of products</h2>
+<br>
 <table>
     <tr>
         <th>Brand</th>
         <th>Model</th>
+        <th>Category</th>
         <th>Size</th>
         <th>Price</th>
         <th>Quantity</th>
@@ -18,13 +24,19 @@
     <tr th:each="product:${products}">
         <td th:text="${product.brand}"/>
         <td th:text="${product.model}"/>
+        <td th:text="${product.category.name}"/>
         <td th:text="${product.size}"/>
         <td th:text="${product.price}"/>
         <td th:text="${product.quantity}"/>
         <td>
-            <a th:href="@{/purchase/{purchaseId}/add/{productId} (purchaseId=${session.purchase['id']}, productId=${product.id}) }">Buy</a>
+            <a th:href="@{/product/modify/{productId} (productId=${product.id}) }">Modify</a>
+        </td>
+        <td>
+            <a th:href="@{/product/delete/{productId} (productId=${product.id}) }">Delete</a>
         </td>
     </tr>
 </table>
+<a th:href="@{/adminHome}">Home</a><br>
+<a th:href="@{/user/logout}">Logout</a>
 </body>
 </html>

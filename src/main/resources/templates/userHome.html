@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Sporty Shoes</title>
+  <meta charset="UTF-8">
+  <title>Sporty Shoes</title>
 </head>
 <body>
 <h4 th:text="'User '+${session.user['name']}+' '+${session.user['lastname']}"></h4>
 <h2 th:text="'Wellcome to Sporty Shoes'"></h2>
 <h4 th:text="${message}"></h4>
-<a th:href="@{/product/list}">Manage products</a><br/>
-<a th:href="@{/user/list}">Manage users</a><br/>
-<a th:href="@{/purchase/list}">Manage orders</a><br/>
+<a th:href="@{/purchase/do}">Buy products</a><br/>
 <a th:href="@{/user/logout}">Logout</a>
 </body>
 </html>

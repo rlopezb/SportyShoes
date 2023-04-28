@@ -24,5 +24,9 @@ public class Product {
   private Integer quantity;
   @OneToMany(mappedBy = "product")
   private List<PurchaseProduct> purchaseProducts=new ArrayList<>();
+  @ManyToOne
+  @JoinColumn(name = "category_id", nullable = false)
+  private Category category;
+
 }
 

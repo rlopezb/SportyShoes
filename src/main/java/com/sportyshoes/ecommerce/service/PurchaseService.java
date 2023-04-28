@@ -12,9 +12,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PurchaseService {
@@ -88,5 +90,62 @@ public class PurchaseService {
     } catch (Exception ex) {
       return null;
     }
+  }
+
+  public PurchaseDto pay(PurchaseDto purchaseDto) {
+    purchaseDto.setPayed(LocalDateTime.now());
+    return save(purchaseDto);
+  }
+
+  public PurchaseDto cancel(PurchaseDto purchaseDto) {
+    purchaseDto.setCancelled(LocalDateTime.now());
+    for (PurchaseProductDto purchaseProductDto : purchaseDto.getPurchaseProducts()) {
+      Optional<Product> optionalProduct = productRepository.findById(purchaseProductDto.getProductId());
+      if (optionalProduct.isPresent()) {
+        Product product = optionalProduct.get();
+        product.setQuantity(product.getQuantity() + purchaseProductDto.getQuantity());
+        productRepository.save(product);
+      }
+    }
+    Purchase purchase = purchaseRepository.save(modelMapper.map(purchaseDto, Purchase.class));
+    return modelMapper.map(purchase, PurchaseDto.class);
+  }
+
+  public List<PurchaseDto> findAll() {
+    List<Purchase> purchases = purchaseRepository.findAll();
+    if (purchases == null)
+      return null;
+    return purchases.stream()
+        .map(product -> modelMapper.map(product, PurchaseDto.class))
+        .collect(Collectors.toList());
+  }
+
+  public List<PurchaseDto> findByStatusAndCreated(String status, LocalDateTime created) {
+    List<Purchase> purchases = null;
+    if (status == null && created == null) {
+      return findAll();
+    }
+    if (status != null && created == null) {
+      switch (status) {
+        case "draft" -> purchases = purchaseRepository.findAllByPayedIsNullAndCancelledIsNull();
+        case "cancelled" -> purchases = purchaseRepository.findAllByCancelledNotNull();
+        case "payed" -> purchases = purchaseRepository.findAllByPayedNotNull();
+      }
+    }
+    if (status == null && created != null) {
+      purchases = purchaseRepository.findAllByCreatedAfter(created);
+    }
+    if (status != null && created != null) {
+      switch (status) {
+        case "draft" -> purchases = purchaseRepository.findAllByPayedIsNullAndCancelledIsNullAndCreatedAfter(created);
+        case "cancelled" -> purchases = purchaseRepository.findAllByCancelledNotNullAndCreatedAfter(created);
+        case "payed" -> purchases = purchaseRepository.findAllByPayedNotNullAndCreatedAfter(created);
+      }
+    }
+    if (purchases == null)
+      return null;
+    return purchases.stream()
+        .map(product -> modelMapper.map(product, PurchaseDto.class))
+        .collect(Collectors.toList());
   }
 }

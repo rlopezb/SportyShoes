@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sporty Shoes</title>
+    <link rel="stylesheet" href="/css/sporty.css">
+</head>
+<body>
+<h2 th:text="'Wellcome to Sporty Shoes'"></h2>
+<h4 th:text="'User '+${session.user['name']}+' '+${session.user['lastname']}"></h4>
+<h4 th:text="${message}"/>
+<div class="row">
+    <div class="column">
+        <h4 th:text="'Our products'"></h4>
+        <table>
+            <tr>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Category</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+            <tr th:each="product:${products}">
+                <td th:text="${product.brand}"/>
+                <td th:text="${product.model}"/>
+                <td th:text="${product.category.name}"/>
+                <td th:text="${product.size}"/>
+                <td th:text="${product.price}"/>
+                <td th:text="${product.quantity}"/>
+                <td th:if="${product.quantity>0}">
+                    <a th:href="@{/purchase/{purchaseId}/add/{productId} (purchaseId=${session.purchase['id']}, productId=${product.id}) }">Buy</a>
+                </td>
+                <td th:unless="${product.quantity>0}"></td>
+            </tr>
+        </table>
+    </div>
+    <div class="column">
+        <h4 th:text="'Shopping cart'"></h4>
+        <table>
+            <tr>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Category</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+            <tr th:each="purchaseProduct:${session.purchase['purchaseProducts']}">
+                <td th:text="${purchaseProduct.productBrand}"/>
+                <td th:text="${purchaseProduct.productModel}"/>
+                <td th:text="${purchaseProduct.productCategoryName}"/>
+                <td th:text="${purchaseProduct.productSize}"/>
+                <td th:text="${purchaseProduct.productPrice}"/>
+                <td th:text="${purchaseProduct.quantity}"/>
+            </tr>
+            <tr th:if="${not #lists.isEmpty(session.purchase['purchaseProducts'])}">
+                <td colspan="4"></td>
+                <td>
+                    <b th:text="${#numbers.formatDecimal(#aggregates.sum(session.purchase['purchaseProducts'].![productPrice*quantity]), 0, 'COMMA', 2, 'POINT')}"/>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <div th:if="${not #lists.isEmpty(session.purchase['purchaseProducts'])}">
+            <a th:href="@{/purchase/{purchaseId}/pay (purchaseId=${session.purchase['id']})}">Pay</a><br>
+            <a th:href="@{/purchase/{purchaseId}/cancel (purchaseId=${session.purchase['id']})}">Cancel</a>
+        </div>
+    </div>
+</div>
+<a th:href="@{/user/logout}">Logout</a>
+</body>
+</html>
